@@ -25,9 +25,11 @@ import ItemCard from "../components/ItemCard.vue";
 import AddNoteDialog from "../components/AddNoteDialog.vue";
 export default {
     name: "note",
+    created() {
+      this.$store.dispatch("notes/init");
+    },
     computed: {
         notes() {
-          this.$store.dispatch("notes/init");
           return this.$store.getters["notes/getNotes"];
         },
     },

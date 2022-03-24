@@ -23,6 +23,7 @@
 <script>
 import DeleteNoteDialog from "./DeleteNoteDialog.vue";
 export default {
+    name: "ItemCard",
     props: ["note"],
     components: { DeleteNoteDialog }
 }

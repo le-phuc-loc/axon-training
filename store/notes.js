@@ -39,7 +39,7 @@ export const getters = {
 export const actions = {
     init({commit}) {
         this.$axios
-        .$get('notes')
+        .$get('/notes')
         .then((result) => {
             console.log(result)
             commit('init', result)

@@ -31,6 +31,9 @@
 import DeleteNoteDialog from "~/components/DeleteNoteDialog.vue";
 export default {
   name: "note-details",
+  created() {
+    
+  },
   data: () => {
     return {
       note: {
