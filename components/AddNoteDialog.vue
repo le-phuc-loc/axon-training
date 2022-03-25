@@ -1,5 +1,5 @@
 <template>
-  <v-dialog transition="dialog-top-transition" max-width="600">
+  <v-dialog v-model="dialog" max-width="600">
     <template v-slot:activator="{ on, attrs }">
       <v-btn outlined fab color="teal" v-bind="attrs" v-on="on">
         <v-icon>mdi-plus</v-icon>
@@ -10,17 +10,18 @@
         <v-card-text>
           <v-textarea
             solo
-            flat = true
-            no-resize = true
+            :flat=true
+            :no-resize=true
             label="Solo textarea"
-            ></v-textarea>
+            v-model="value"
+          ></v-textarea>
         </v-card-text>
         <v-card-actions class="justify-content-between">
-          <v-btn class="" text @click="dialog.value = false">
-              <v-icon>mdi-close-thick</v-icon>
+          <v-btn class="" text @click="dialog = false">
+            <v-icon>mdi-close-thick</v-icon>
           </v-btn>
-          <v-btn class="" text @click="dialog.value = false">
-              <v-icon>mdi-check-bold</v-icon>
+          <v-btn class="" text @click="addNote()">
+            <v-icon>mdi-check-bold</v-icon>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -35,8 +36,19 @@
 export default {
   data() {
     return {
-      dialog: false,
+      value: "",
+      dialog: false
     };
+  },
+
+  methods: {
+    addNote() {
+      console.log(this.value)
+      this.dialog = false
+      this.$store.dispatch('notes/addNote', {
+        content: this.value
+      })
+    },
   },
 };
 </script>

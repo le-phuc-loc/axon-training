@@ -1,54 +1,111 @@
 export const state = () => ({
-    notes: [
-        // {
-        //     id: 0,
-        //     content: "hello world",
-        //     created_date: '22/11/2222'
-        // },
-        // {
-        //     id: 1,
-        //     content: "hello world 1",
-        //     created_date: '22/11/2222'
-        // },
-
-        // {
-        //     id: 2,
-        //     content: "hello world 2 hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2hello world 2",
-        //     created_date: '22/11/2222'
-        
-        // }
-    ]
+    notes: [],
+    currentPage: 0,
+    isTheLastPage: false
 })
 
 export const mutations = {
-    add(state, note) {
-        state.notes.push( note )
+    addNote(state, note) {
+        state.notes.unshift( note )
     },
 
-    init(state, notes) {
-        state.notes = notes;
+    deleteNote(state, note) {
+        state.notes = state.notes.filters( (record) => record.id !== note.id )
+    },
+
+    increaseCurrentPage(state) {
+        state.currentPage++;
+    },
+
+    fetchNotes(state, notes) {
+        state.notes.push(...notes)
+    },
+
+    init(state) {
+        state.notes = []
+        state.currentPage = 0
+        state.isTheLastPage = false
+    },
+
+    setIsTheLastPage(state, isTheLastPage) {
+        state.isTheLastPage = isTheLastPage
     }
 }
 
 export const getters = {
     getNotes(state) {
       return state.notes
+    },
+
+    getCurrentPage(state) {
+        return state.currentPage
+    },
+
+    isTheLastPage(state) {
+        return state.isTheLastPage
     }
 }
 
 export const actions = {
-    init({commit}) {
-        this.$axios
+    async init({commit}) {
+        await this.$axios
         .$get('/notes')
         .then((result) => {
-            console.log(result)
             commit('init', result)
         })
         .catch((error) => {
             console.log(error)
         })
     },
-    storeNotes({ commit }, notes) {
-        commit('add', notes)
+
+    storeNotes({ commit }, payload) {
+        commit('add', payload)
+    },
+
+    increaseCurrentPage({ commit }) {
+        commit('increaseCurrentPage')
+    },
+
+    setIsTheLastPage({ commit }, payload) {
+        commit('setIsTheLastPage', payload)
+    },
+
+    async fetchNotes({ commit }, payload) {
+        await this.$axios
+        .$get('/notes', { params: payload})
+        .then((result) => {
+            commit('fetchNotes', result)
+            commit('increaseCurrentPage')
+            if (result.length <= 0) {
+                commit('setIsTheLastPage', true)
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    },
+
+    async addNote({commit}, payload) {
+        await this.$axios
+        .$post('/notes',  payload )
+        .then((result) => {
+            commit('addNote', result)
+            console.log("add note successfully!!!")
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    },
+
+    async deleteNote({commit}, payload) {
+        await this.$axios
+        .$delete(`/notes/${payload.id}`)
+        .then(() => {
+            commit('deleteNote', payload)
+            console.log("delete note successfully!!!")
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
 }
