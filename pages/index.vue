@@ -17,11 +17,28 @@
       v-model="searchContent"
     ></v-text-field>
 
+
     <v-list v-if="searchContent" three-line>
-      <ItemCard v-for="note in searchedNotes.data" :key="note.id" :note="note" />
+      <div v-if="searchedNotes.data.length > 0" >
+        <ItemCard v-for="note in searchedNotes.data" :key="note.id" :note="note" />
+      </div>
+      <div v-else>
+        <div>
+          Empty
+        </div>
+      </div>
+      
     </v-list>
     <v-list v-else three-line>
-      <ItemCard  v-for="note in notes" :key="note.id" :note="note" />
+      <div v-if="notes.length > 0" >
+        <ItemCard  v-for="note in notes" :key="note.id" :note="note" />
+      </div>
+      <div v-else>
+        <div>
+          Empty
+        </div>
+      </div>
+      
     </v-list>
     
   </div>
