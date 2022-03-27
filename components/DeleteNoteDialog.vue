@@ -14,9 +14,9 @@
       </v-btn>
     </template>
     <template v-slot:default="dialog">
-      <v-card>
-        <v-card-text> Are you sure you want to delete?</v-card-text>
-        <v-card-actions class="justify-content-between">
+      <v-card class="delete-dialog">
+        <v-card-text class="text-center"> Are you sure you want to delete?</v-card-text>
+        <v-card-actions class="justify-space-between">
           <v-btn class="" icon @click="dialog.value = false">
             <v-icon>mdi-close-thick</v-icon>
           </v-btn>
@@ -56,5 +56,14 @@ export default {
 .btn-delete-note{
   width: 30px !important;
   height: 30px !important;
+}
+
+.delete-dialog {
+  background-color: #C4C4C4 !important;
+}
+
+.delete-dialog .v-card__text.text-center{
+  color: #000;
+  font-size: 18px !important;
 }
 </style>

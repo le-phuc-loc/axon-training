@@ -110,10 +110,10 @@ export const actions = {
         .$post('/notes',  payload )
         .then((result) => {
             commit('addNote', result)
-            console.log("add note successfully!!!")
+            alert("add note successfully!!!")
         })
         .catch((error) => {
-            console.log(error)
+            alert(error)
         })
     },
 
@@ -122,10 +122,10 @@ export const actions = {
         .$put(`/notes/${payload.id}`,  payload )
         .then((result) => {
             commit('updateNote', payload)
-            console.log("update note successfully!!!")
+            alert("update note successfully!!!")
         })
         .catch((error) => {
-            console.log(error)
+            alert(error)
         })
     },
 
@@ -134,10 +134,10 @@ export const actions = {
         .$delete(`/notes/${payload.id}`)
         .then(() => {
             commit('deleteNote', payload.id)
-            console.log("delete note successfully!!!")
+            alert("delete note successfully!!!")
         })
         .catch((error) => {
-            console.log(error)
+            alert(error)
         })
     },
 
@@ -146,7 +146,6 @@ export const actions = {
     },
 
     async fetchSearchedNotes({commit}, payload) {
-        console.log(payload)
         await this.$axios
         .$get('/notes', { params: payload})
         .then((result) => {
@@ -156,7 +155,7 @@ export const actions = {
             }
         })
         .catch((error) => {
-            console.log(error)
+            alert(error)
         })
     }
 }
