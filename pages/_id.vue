@@ -1,69 +1,73 @@
 <template>
   <div class="note-details">
-    <v-row>
-      <v-col :cols="6">
-        <v-btn
+    <div class="content d-flex flex-column justify-space-between">
+      <div>
+        <v-row>
+          <v-col :cols="6">
+            <v-btn
+              color="#77a5d0"
+              :retain-focus-on-click="true"
+              :depressed="true"
+              :to="`/`"
+              nuxt
+            >
+              <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>
+          </v-col>
+          <v-col :cols="6" class="text-right">
+            <DeleteNoteDialog @confirm-delete="deleteNote" />
+          </v-col>
+        </v-row>
+        <v-textarea
+          class="content-detail-note"
+          solo
+          :flat="true"
+          :no-resize="true"
           color="#77a5d0"
-          :retain-focus-on-click=true
-          :depressed=true
-          :to="`/`"
-          nuxt
-        >
-          <v-icon>mdi-arrow-left</v-icon>
-        </v-btn>
-      </v-col>
-      <v-col :cols="6" class="text-right">
-        <DeleteNoteDialog @confirm-delete="deleteNote"/>
-      </v-col>
-    </v-row>
-    <v-textarea
-      class="content-detail-note"
-      solo
-      :flat=true
-      :no-resize=true
-      color="#77a5d0"
-      label="Type your content"
-      :value="note.content"
-      @input="debounceInput"
-    ></v-textarea>
-    <div class="created-at-detail-note"> {{ note.createdAt }} </div>
+          label="Type your content"
+          :value="note.content"
+          @input="debounceInput"
+        ></v-textarea>
+      </div>
+
+      <div class="created-at-detail-note align-self-end">
+        {{ note.createdAt }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import DeleteNoteDialog from "~/components/DeleteNoteDialog.vue";
-import _ from 'lodash';
+import _ from "lodash";
 
 export default {
   name: "note-details",
   data: () => ({
     timeOut: null,
   }),
-  
-  async asyncData({params, $axios}) {
-    return await $axios.$get(`notes/${params.id}`)
-      .then((result) => {
-        return {note: result}
-      })
+
+  async asyncData({ params, $axios }) {
+    return await $axios.$get(`notes/${params.id}`).then((result) => {
+      return { note: result };
+    });
   },
   computed: {},
   methods: {
     deleteNote() {
-      this.$store.dispatch("notes/deleteNote", this.note)
-      this.$router.push("/")
+      this.$store.dispatch("notes/deleteNote", this.note);
+      this.$router.push("/");
     },
 
     debounceInput(e) {
       clearTimeout(this.timeOut);
       this.timeOut = setTimeout(() => {
-        this.$store.dispatch('notes/updateNote', {
+        this.$store.dispatch("notes/updateNote", {
           id: this.note.id,
-          content: e
-        })
+          content: e,
+        });
       }, 500);
-    }
-      
-
+    },
   },
   components: { DeleteNoteDialog },
 };
@@ -71,16 +75,25 @@ export default {
 
 <style lang="scss">
 .note-details {
+  position: absolute;
   height: 100%;
+  width: 100%;
   background-color: #77a5d0;
 }
 
-.content-detail-note {
+.note-details .content {
+  padding: 12px;
+}
+
+.note-details div.v-input__slot {
+  background-color: #77a5d0 !important;
+}
+
+.content-detail-note textarea {
   color: #fff !important;
 }
 
 .created-at-detail-note {
   text-align: right;
 }
-
 </style>

@@ -17,11 +17,28 @@
       v-model="searchContent"
     ></v-text-field>
 
+
     <v-list v-if="searchContent" three-line>
-      <ItemCard v-for="note in searchedNotes.data" :key="note.id" :note="note" />
+      <div v-if="searchedNotes.data.length > 0" >
+        <ItemCard v-for="note in searchedNotes.data" :key="note.id" :note="note" />
+      </div>
+      <div v-else>
+        <div>
+          Empty
+        </div>
+      </div>
+      
     </v-list>
     <v-list v-else three-line>
-      <ItemCard  v-for="note in notes" :key="note.id" :note="note" />
+      <div v-if="notes.length > 0" >
+        <ItemCard  v-for="note in notes" :key="note.id" :note="note" />
+      </div>
+      <div v-else>
+        <div>
+          Empty
+        </div>
+      </div>
+      
     </v-list>
     
   </div>
@@ -54,7 +71,8 @@ export default {
     },
     searchedNotes() {
       return this.$store.getters["notes/getsearchedNotes"]
-    }
+    },
+    
   },
   mounted() {
     this.scroll();
@@ -105,15 +123,18 @@ export default {
           content: this.searchContent
         })
       }, 500);
-    }
+    },
+    
   },
   components: { ItemCard, AddNoteDialog },
 };
 </script>
 
 <style lang="scss">
-.search-field {
+.search-field div.v-input__slot{
   margin: 24px 0px 0px 0px !important;
-  box-shadow: 100px !important;
+  box-shadow: 0px 5px 5px 0px grey !important;
+  border-radius: 8px;
+  border: 1.5px solid;
 }
 </style>

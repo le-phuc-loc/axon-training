@@ -6,7 +6,7 @@
       </v-btn>
     </template>
     <template v-slot:default="dialog">
-      <v-card>
+      <v-card class="add-note-dialog">
         <v-card-text>
           <v-textarea
             solo
@@ -16,8 +16,8 @@
             v-model="value"
           ></v-textarea>
         </v-card-text>
-        <v-card-actions class="justify-content-between">
-          <v-btn class="" text @click="dialog = false">
+        <v-card-actions class="justify-space-between">
+          <v-btn class="" text @click="close()">
             <v-icon>mdi-close-thick</v-icon>
           </v-btn>
           <v-btn class="" text @click="addNote()">
@@ -49,6 +49,10 @@ export default {
         content: this.value
       })
     },
+
+    close() {
+      this.dialog = false
+    }
   },
 };
 </script>
@@ -57,5 +61,9 @@ export default {
 .btn-add-note,  .btn-add-note v-icon{
   width: 30px !important;
   height: 30px !important;
+}
+
+.add-note-dialog, .add-note-dialog div.v-input__slot {
+  background-color: #77a5d0 !important;
 }
 </style>
