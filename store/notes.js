@@ -1,35 +1,61 @@
 export const state = () => ({
     notes: [],
     currentPage: 0,
-    isTheLastPage: false
+    isTheLastPage: false,
+    searchedNotes: {
+        data: [],
+        currentPage: 0,
+        isTheLastPage: false
+    }
 })
 
 export const mutations = {
-    addNote(state, note) {
-        state.notes.unshift( note )
-    },
-
-    deleteNote(state, note) {
-        state.notes = state.notes.filters( (record) => record.id !== note.id )
-    },
-
-    increaseCurrentPage(state) {
-        state.currentPage++;
-    },
-
-    fetchNotes(state, notes) {
-        state.notes.push(...notes)
-    },
-
     init(state) {
         state.notes = []
         state.currentPage = 0
         state.isTheLastPage = false
     },
 
+    fetchNotes(state, notes) {
+        state.notes.push(...notes)
+        state.currentPage++
+    },
+
     setIsTheLastPage(state, isTheLastPage) {
         state.isTheLastPage = isTheLastPage
-    }
+    },
+
+    addNote(state, note) {
+        state.notes.unshift( note )
+    },
+
+    updateNote(state, note) {
+        state.notes = state.notes.map((record) => {
+            console.log(record.id === note.id)
+            return record.id === note.id ? {...note, content: note.content} : record
+        })
+    },
+
+    deleteNote(state, id) {
+        state.notes = state.notes.filter( (record) => {return record.id !== id} )
+    },
+
+    fetchSearchedNotes(state, searchedNotes) {
+        state.searchedNotes.data.push(...searchedNotes)
+        state.searchedNotes.currentPage++
+    },
+
+    initsearchedNotes(state) {
+        state.searchedNotes.data = []
+        state.searchedNotes.currentPage = 0
+        state.searchedNotes.isTheLastPage = false
+    },
+
+    setIsTheLastPageOfsearchedNotes(state, isTheLastPage) {
+        state.searchedNotes.isTheLastPage = isTheLastPage
+    },    
+
+    
 }
 
 export const getters = {
@@ -43,23 +69,18 @@ export const getters = {
 
     isTheLastPage(state) {
         return state.isTheLastPage
+    },
+
+    getsearchedNotes(state) {
+        return state.searchedNotes
     }
+
+
 }
 
 export const actions = {
-    async init({commit}) {
-        await this.$axios
-        .$get('/notes')
-        .then((result) => {
-            commit('init', result)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-    },
-
-    storeNotes({ commit }, payload) {
-        commit('add', payload)
+    init({commit}) {
+        commit('init')
     },
 
     increaseCurrentPage({ commit }) {
@@ -75,7 +96,6 @@ export const actions = {
         .$get('/notes', { params: payload})
         .then((result) => {
             commit('fetchNotes', result)
-            commit('increaseCurrentPage')
             if (result.length <= 0) {
                 commit('setIsTheLastPage', true)
             }
@@ -97,12 +117,43 @@ export const actions = {
         })
     },
 
+    async updateNote({commit}, payload) {
+        await this.$axios
+        .$put(`/notes/${payload.id}`,  payload )
+        .then((result) => {
+            commit('updateNote', payload)
+            console.log("update note successfully!!!")
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    },
+
     async deleteNote({commit}, payload) {
         await this.$axios
         .$delete(`/notes/${payload.id}`)
         .then(() => {
-            commit('deleteNote', payload)
+            commit('deleteNote', payload.id)
             console.log("delete note successfully!!!")
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    },
+
+    initSearchedNote({commit}) {
+        commit('initsearchedNotes')
+    },
+
+    async fetchSearchedNotes({commit}, payload) {
+        console.log(payload)
+        await this.$axios
+        .$get('/notes', { params: payload})
+        .then((result) => {
+            commit('fetchSearchedNotes', result)
+            if (result.length <= 0) {
+                commit('setIsTheLastPageOfsearchedNotes', true)
+            }
         })
         .catch((error) => {
             console.log(error)

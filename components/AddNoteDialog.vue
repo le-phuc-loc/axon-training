@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="dialog" max-width="600">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn outlined fab color="teal" v-bind="attrs" v-on="on">
-        <v-icon>mdi-plus</v-icon>
+      <v-btn class="btn-add-note" outlined fab v-bind="attrs" v-on="on">
+        <v-icon >mdi-plus</v-icon>
       </v-btn>
     </template>
     <template v-slot:default="dialog">
@@ -52,3 +52,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.btn-add-note,  .btn-add-note v-icon{
+  width: 30px !important;
+  height: 30px !important;
+}
+</style>

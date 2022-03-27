@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="note-details">
     <v-row>
       <v-col :cols="6">
         <v-btn
@@ -17,14 +17,16 @@
       </v-col>
     </v-row>
     <v-textarea
+      class="content-detail-note"
       solo
       :flat=true
       :no-resize=true
-      label="Solo textarea"
+      color="#77a5d0"
+      label="Type your content"
       :value="note.content"
       @input="debounceInput"
     ></v-textarea>
-    <div> {{ note.createdAt }} </div>
+    <div class="created-at-detail-note"> {{ note.createdAt }} </div>
   </div>
 </template>
 
@@ -34,6 +36,9 @@ import _ from 'lodash';
 
 export default {
   name: "note-details",
+  data: () => ({
+    timeOut: null,
+  }),
   
   async asyncData({params, $axios}) {
     return await $axios.$get(`notes/${params.id}`)
@@ -47,11 +52,35 @@ export default {
       this.$store.dispatch("notes/deleteNote", this.note)
       this.$router.push("/")
     },
-    debounceInput: _.debounce((e) => {
-      console.log("update content")
-    }, 500)
+
+    debounceInput(e) {
+      clearTimeout(this.timeOut);
+      this.timeOut = setTimeout(() => {
+        this.$store.dispatch('notes/updateNote', {
+          id: this.note.id,
+          content: e
+        })
+      }, 500);
+    }
+      
 
   },
   components: { DeleteNoteDialog },
 };
 </script>
+
+<style lang="scss">
+.note-details {
+  height: 100%;
+  background-color: #77a5d0;
+}
+
+.content-detail-note {
+  color: #fff !important;
+}
+
+.created-at-detail-note {
+  text-align: right;
+}
+
+</style>
