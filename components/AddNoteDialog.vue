@@ -1,18 +1,18 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600">
+  <v-dialog v-model="dialog" max-width="296">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn class="btn-add-note" outlined fab v-bind="attrs" v-on="on">
+      <v-btn class="btn-add-note" @click="initContent" outlined fab v-bind="attrs" v-on="on">
         <v-icon >mdi-plus</v-icon>
       </v-btn>
     </template>
-    <template v-slot:default="dialog">
+    <template>
       <v-card class="add-note-dialog">
         <v-card-text>
           <v-textarea
             solo
             :flat=true
             :no-resize=true
-            label="Solo textarea"
+            label="Type something ..."
             v-model="value"
           ></v-textarea>
         </v-card-text>
@@ -52,6 +52,10 @@ export default {
 
     close() {
       this.dialog = false
+    },
+
+    initContent() {
+        this.value = ""
     }
   },
 };
@@ -66,4 +70,17 @@ export default {
 .add-note-dialog, .add-note-dialog div.v-input__slot {
   background-color: #77a5d0 !important;
 }
+
+.add-note-dialog {
+    border-radius: 8px !important;
+}
+
+.add-note-dialog div.v-card__text {
+    height: 369px;
+}
+
+.add-note-dialog textarea {
+    color: #fff !important
+}
+
 </style>

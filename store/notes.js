@@ -31,8 +31,10 @@ export const mutations = {
 
     updateNote(state, note) {
         state.notes = state.notes.map((record) => {
-            console.log(record.id === note.id)
-            return record.id === note.id ? {...note, content: note.content} : record
+            if (record.id === note.id) {
+                console.log({...record, content: note.content})
+            }
+            return record.id === note.id ? {...record, content: note.content} : record
         })
     },
 
@@ -55,6 +57,13 @@ export const mutations = {
         state.searchedNotes.isTheLastPage = isTheLastPage
     },    
 
+    addToNotesIfNewNoteAddedFromAnotherWay(state, notes) {
+        notes.reverse().forEach(record => {
+            if (!state.notes.some(note => note.id === record.id)) {
+                state.notes.unshift(record)
+            }
+        });
+    },   
     
 }
 
@@ -96,7 +105,7 @@ export const actions = {
         .$get('/notes', { params: payload})
         .then((result) => {
             commit('fetchNotes', result)
-            if (result.length <= 0) {
+            if (result.length < 8) {
                 commit('setIsTheLastPage', true)
             }
         })
@@ -122,7 +131,6 @@ export const actions = {
         .$put(`/notes/${payload.id}`,  payload )
         .then((result) => {
             commit('updateNote', payload)
-            alert("update note successfully!!!")
         })
         .catch((error) => {
             alert(error)
@@ -150,7 +158,8 @@ export const actions = {
         .$get('/notes', { params: payload})
         .then((result) => {
             commit('fetchSearchedNotes', result)
-            if (result.length <= 0) {
+            commit('addToNotesIfNewNoteAddedFromAnotherWay', result)
+            if (result.length < 8) {
                 commit('setIsTheLastPageOfsearchedNotes', true)
             }
         })

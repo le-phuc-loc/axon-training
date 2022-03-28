@@ -47,7 +47,6 @@
 <script>
 import ItemCard from "../components/ItemCard.vue";
 import AddNoteDialog from "../components/AddNoteDialog.vue";
-import _ from 'lodash';
 
 
 export default {
@@ -92,11 +91,8 @@ export default {
         
 
         if (bottomOfWindow) {
-          
           if (this.searchContent) {
-            
             if (!this.searchedNotes.isTheLastPage) {
-              
               this.$store.dispatch("notes/fetchSearchedNotes", {
                 content: this.searchContent,
                 page_index: this.searchedNotes.currentPage
@@ -136,5 +132,9 @@ export default {
   box-shadow: 0px 5px 5px 0px grey !important;
   border-radius: 8px;
   border: 1.5px solid;
+}
+
+.main {
+  padding: 12px !important;
 }
 </style>

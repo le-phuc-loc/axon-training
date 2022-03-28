@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog">
+  <v-dialog v-model="dialog" max-width="305">
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         class="btn-delete-note"
@@ -8,7 +8,6 @@
         v-on="on"
         :retain-focus-on-click=true
         :depressed=true
-        @click="e => e.stopPropagation()"
       >
         <v-icon>mdi-trash-can-outline</v-icon>
       </v-btn>
@@ -52,7 +51,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
 .btn-delete-note{
   width: 30px !important;
   height: 30px !important;
@@ -63,7 +62,15 @@ export default {
 }
 
 .delete-dialog .v-card__text.text-center{
+  padding-top: 15px !important;
   color: #000;
   font-size: 18px !important;
 }
+
+.delete-dialog{
+  height: 123px;
+}
+
+
+
 </style>

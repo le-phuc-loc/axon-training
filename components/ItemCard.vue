@@ -23,7 +23,6 @@ export default {
   props: ["note"],
   methods: {
     deleteNote() {
-      console.log("aosjdoiasjiodjiasjd")
       this.$store.dispatch("notes/deleteNote", this.note);
     },
     navigateToDetail() {

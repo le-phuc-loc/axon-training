@@ -1,8 +1,8 @@
 <template>
   <div class="note-details">
-    <div class="content d-flex flex-column justify-space-between">
-      <div>
-        <v-row>
+    <div class="content d-flex flex-column">
+      <div class="content-detail-note d-flex flex-column flex-grow-1">
+        <v-row class="align-start flex-grow-0">
           <v-col :cols="6">
             <v-btn
               color="#77a5d0"
@@ -19,7 +19,7 @@
           </v-col>
         </v-row>
         <v-textarea
-          class="content-detail-note"
+          class="content-detail-note-textarea flex-grow-1"
           solo
           :flat="true"
           :no-resize="true"
@@ -27,10 +27,12 @@
           label="Type your content"
           :value="note.content"
           @input="debounceInput"
+          rows="25"
         ></v-textarea>
+        
       </div>
 
-      <div class="created-at-detail-note align-self-end">
+      <div class="created-at-detail-note flex-grow-0">
         {{ note.createdAt }}
       </div>
     </div>
@@ -39,7 +41,6 @@
 
 <script>
 import DeleteNoteDialog from "~/components/DeleteNoteDialog.vue";
-import _ from "lodash";
 
 export default {
   name: "note-details",
@@ -83,6 +84,7 @@ export default {
 
 .note-details .content {
   padding: 12px;
+  height: 100% !important;
 }
 
 .note-details div.v-input__slot {
@@ -94,6 +96,20 @@ export default {
 }
 
 .created-at-detail-note {
+  // position: absolute;
+  // bottom: 12px;
+  // right: 12px;
   text-align: right;
+  color: #5A4F4F;
+  font-size: 12px;
 }
+
+div.container {
+  padding: 0px !important;
+}
+
+.content-detail-note-textarea .v-input__control{
+  flex:1
+}
+
 </style>
