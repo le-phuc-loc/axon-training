@@ -1,3 +1,6 @@
+var moment = require('moment'); // require
+
+
 export const state = () => ({
     notes: [],
     currentPage: 0,
@@ -60,7 +63,12 @@ export const mutations = {
     addToNotesIfNewNoteAddedFromAnotherWay(state, notes) {
         notes.reverse().forEach(record => {
             if (!state.notes.some(note => note.id === record.id)) {
-                state.notes.unshift(record)
+                let indexOfLastedNote = state.notes.findIndex(element => {                    
+                    return moment(record.createdAt, 'dd-MM-yyyy HH:mm:ss')
+                    .isAfter(moment(element.createdAt, 'dd-MM-yyyy HH:mm:ss'))
+                })
+
+                state.notes.splice(indexOfLastedNote, 0, record)
             }
         });
     },   
